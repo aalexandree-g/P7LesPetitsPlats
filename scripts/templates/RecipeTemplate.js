@@ -5,6 +5,17 @@ export default class RecipeTemplate {
 
     createRecipeCard() {
 
+        // generate list of ingredients
+        const ingredientsHTML = this._recipe.formattedIngredients.map(item => {
+            return `
+                <p class="ingredient-element">
+                    <span class="ingredient-name">${item.name}</span>
+                    <span class="ingredient-quantity">${item.quantity} ${item.unit}</span>
+                </p>
+            `
+        }).join("")
+
+        // generate card's structure
         const $card = document.createElement("article")
         $card.classList.add("recipe-card")
         $card.innerHTML = `
@@ -21,26 +32,13 @@ export default class RecipeTemplate {
                 <div class="recipe-ingredients">
                     <h4>INGRÉDIENTS</h4>
                     <div class="ingredients-container">
-
+                        ${ingredientsHTML}
                     </div>
                 </div>
             </div>
         `.trim()
-        return $card
-    }
 
-    addIngredients() {
-        this._recipe.ingredients.map(element => {
-            const ingredient = element.ingredient;
-            const quantity = element.quantity ? `${element.quantity}` : ""
-            const unit = element.unit ? ` ${element.unit}` : ""
-            const $ingredients = document.createElement("p")
-            $ingredients.classList.add("ingredient-element")
-            $ingredients.innerHTML = `
-                <span class="ingredient-name">${ingredient}</span>
-                <span class="ingredient-quantity">${quantity} ${unit}</span>
-            `.trim()
-            document.querySelector(".ingredients-container").appendChild($ingredients)
-        })
+        return $card
+        
     }
 }

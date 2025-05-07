@@ -30,6 +30,14 @@ export default class Recipe {
     get ingredients() {
         return this._ingredients;
     }
+
+    get formattedIngredients() {
+        return this._ingredients.map(element => ({
+            name : element.ingredient,
+            quantity : element.quantity ? `${element.quantity}` : "",
+            unit : element.unit ? ` ${element.unit}` : ""
+        }))
+    }
     
     get time() {
         return this._time;

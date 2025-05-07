@@ -74,16 +74,14 @@ body {
 .search-bar input::placeholder {
     color: #7A7A7A;
 }
-.search-bar img {
+.search-icon {
     padding: 0.6rem;
     margin-right: 0.7rem;
     max-height: 2rem;
-    color: #FFFFFF;
     background-color: #1B1B1B;
     border-radius: 0.5rem;
 }
-.search-bar img:hover {
-    color: #1B1B1B;
+.search-icon:hover {
     background-color: #FFD15B;
 }
 
@@ -102,35 +100,82 @@ body {
 .main-sort {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
     gap: 3rem;
 }
 .filters {
     display: flex;
     gap: 3rem;
+    
 }
 .nb-recipes h2 {
     font-family: 'Anton', sans-serif;
     font-size: 1.4rem;
 }
 
-
-.dropdown .options button {
+.dropdown .options {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 1rem;
+    width: 11rem;
+    height: auto;
+    max-height: 20rem;
+    padding: 1rem 1rem;
+    border-radius: 0.6rem;
+    background-color: #FFFFFF;
+    overflow: hidden;
+}
+.dropdown button {
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 2rem;
-    width: 11rem;
-    height: 3.5rem;
-    padding: 0rem 1rem;
     border: none;
-    border-radius: 0.6rem;
-    font-weight: 500;
-    text-align: left;
     background-color: #FFFFFF;
 }
-.dropdown img {
+.dropdown span {
+    font-size: 1rem;
+    font-weight: 500;
+}
+.dropdown .chevron-icon {
     height: 0.5rem;
+}
+.dropdown .filters-search {
+    display: none;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    background-color: rgb(255, 255, 255);
+    width: 100%;
+    border: 1px solid #C6C6C6;
+}
+.dropdown .filters-search-icon {
+    padding: 0.6rem;
+    max-height: 0.9rem;
+    border-radius: 0.5rem;
+}
+.dropdown .filters-search input,
+.dropdown .filters-search span {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+}
+.dropdown .filters-search input {
+    height: 2.3rem;
+    outline: none;
+    border: none;
+}
+.dropdown .choices {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    overflow-y: auto;
+}
+.dropdown .choices button {
+    font-size: 0.9rem;
+    color: #1B1B1B;
 }
 
 
@@ -200,7 +245,7 @@ body {
 }
 .recipe-card .recipe-description {
     display: -webkit-box;
-    -webkit-line-clamp: 5;
+    -webkit-line-clamp: 4;
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
