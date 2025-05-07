@@ -91,7 +91,6 @@ body {
     flex-direction: column;
     gap: 3rem;
     width: 100%;
-    height: auto;
     margin-top: 13rem;
     margin-bottom: 10rem;
 }
@@ -102,6 +101,7 @@ body {
     justify-content: space-between;
     align-items: flex-start;
     gap: 3rem;
+    height: 3.5rem;
 }
 .filters {
     display: flex;
@@ -125,6 +125,8 @@ body {
     border-radius: 0.6rem;
     background-color: #FFFFFF;
     overflow: hidden;
+    position: relative;
+    z-index: 100;
 }
 .dropdown button {
     display: flex;
@@ -142,7 +144,7 @@ body {
     height: 0.5rem;
 }
 .dropdown .filters-search {
-    display: none;
+    display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 1rem;
@@ -174,12 +176,15 @@ body {
     overflow-y: auto;
 }
 .dropdown .choices button {
+    text-align: left;
     font-size: 0.9rem;
     color: #1B1B1B;
 }
 
 
 .recipes {
+    position: relative;
+    z-index: 10;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     column-gap: 3rem;

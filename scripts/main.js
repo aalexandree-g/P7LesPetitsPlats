@@ -3,9 +3,24 @@ import RecipeTemplate from "./templates/RecipeTemplate.js"
 
 
 
-recipes.forEach(recipe => {
-    const test = new Recipe(recipe)
-    const $card = new RecipeTemplate(test).createRecipeCard()
-    const ht = document.querySelector(".recipes")
-    ht.appendChild($card)
+
+
+
+
+const allIngredients = []
+
+// display recipes' cards
+recipes.forEach(recipeData => {
+    const recipe = new Recipe(recipeData)
+
+    allIngredients.push(...recipe.normalizedIngredients.map(item => item.normalizedName))
+
+    const $card = new RecipeTemplate(recipe).createRecipeCard()
+    document.querySelector(".recipes").appendChild($card)
 })
+
+const uniqueIngredients = [...new Set(allIngredients)].sort((a, b) => a.localeCompare(b))
+const filtersHTML = uniqueIngredients.map(ingredient => {
+    return `<button>${ingredient}</button>`
+}).join("")
+document.querySelector(".choices").innerHTML = filtersHTML

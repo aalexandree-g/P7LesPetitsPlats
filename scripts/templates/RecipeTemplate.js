@@ -39,6 +39,6 @@ export default class RecipeTemplate {
         `.trim()
 
         return $card
-        
+
     }
 }
