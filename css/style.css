@@ -143,8 +143,9 @@ body {
 .dropdown .chevron-icon {
     height: 0.5rem;
 }
-.dropdown .filters-search {
-    display: flex;
+.dropdown .ingredients-search,
+.dropdown .appliances-search {
+    display: none;
     justify-content: space-between;
     align-items: center;
     gap: 1rem;
@@ -152,30 +153,43 @@ body {
     width: 100%;
     border: 1px solid #C6C6C6;
 }
-.dropdown .filters-search-icon {
+.dropdown .ingredients-search.open,
+.dropdown .appliances-search.open {
+    display: flex;
+}
+.dropdown .filter-search-icon {
     padding: 0.6rem;
     max-height: 0.9rem;
     border-radius: 0.5rem;
 }
-.dropdown .filters-search input,
-.dropdown .filters-search span {
+.dropdown .ingredients-search input,
+.dropdown .ingredients-search span,
+.dropdown .appliances-search input,
+.dropdown .appliances-search span {
     display: block;
     width: 100%;
     box-sizing: border-box;
 }
-.dropdown .filters-search input {
+.dropdown .ingredients-search input,
+.dropdown .appliances-search input {
     height: 2.3rem;
     outline: none;
     border: none;
 }
-.dropdown .choices {
-    display: flex;
+.dropdown .choices,
+.dropdown .appliances {
+    display: none;
     flex-direction: column;
     gap: 0.5rem;
     margin-top: 0.5rem;
     overflow-y: auto;
 }
-.dropdown .choices button {
+.dropdown .choices.open,
+.dropdown .appliances.open {
+    display: flex;
+}
+.dropdown .choices button,
+.dropdown .appliances button {
     text-align: left;
     font-size: 0.9rem;
     color: #1B1B1B;

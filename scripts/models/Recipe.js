@@ -17,10 +17,29 @@ const rules = [
     { keywords: ["sucre", "poudre"], result: "Sucre"},
     { keywords: ["sucre", "roux"], result: "Sucre"},
     { keywords: ["tomate", "pelées"], result: "Tomate"},
+    { keywords: ["tomate", "cerises"], result: "Tomate cerise"},
+    { keywords: ["vermicelles"], result: "Vermicelle"},
+    { keywords: ["tagliatelles"], result: "Tagliatelle"},
+    { keywords: ["spaghettis"], result: "Spaghetti"},
+    { keywords: ["saucisse"], result: "Saucisse"},
+    { keywords: ["riz"], result: "Riz"},
+    { keywords: ["pruneaux"], result: "Pruneau"},
+    { keywords: ["chiches"], result: "Pois chiche"},
+    { keywords: ["poires"], result: "Poire"},
+    { keywords: ["poids"], result: "Petit pois"},
+    { keywords: ["pennes"], result: "Penne"},
+    { keywords: ["olives"], result: "Olive"},
+    { keywords: ["macaronis"], result: "Macaroni"},
+    { keywords: ["lardons"], result: "Lardon"},
+    { keywords: ["lasagnes"], result: "Lasagne"},
+    { keywords: ["blanc", "dinde"], result: "Dinde"},
+    { keywords: ["champignon", "paris"], result: "Champignon"},
+    { keywords: ["haricot", "vert"], result: "Haricot vert"},
+    { keywords: ["poudre", "amende"], result: "Poudre d'amande"},
     { keywords: ["balsamic"], result: "Vinaigre balsamique"}
 ]
 
-function normalizeIngredient(name) {
+function normalizeName(name) {
     const lowerName = name.toLowerCase()
     for (const rule of rules) {
         const allKeywordsPresent = rule.keywords.every(keyword => lowerName.includes(keyword))
@@ -65,7 +84,11 @@ export default class Recipe {
     get normalizedIngredients() {
         return this._ingredients.map(item => ({
             ...item,
-            normalizedName: normalizeIngredient(item.ingredient)
+            normalizedName: normalizeName(item.ingredient)
         }))
+    }
+
+    get normalizedAppliances() {
+        return [{ appliance: this._appliance, normalizedName: normalizeName(this._appliance) }];
     }
 }
