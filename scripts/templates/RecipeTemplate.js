@@ -4,7 +4,6 @@ export default class RecipeTemplate {
     }
 
     createRecipeCard() {
-
         // generate list of ingredients
         const ingredientsHTML = this._recipe.formattedIngredients.map(item => {
             return `
@@ -14,7 +13,6 @@ export default class RecipeTemplate {
                 </p>
             `
         }).join("")
-
         // generate card's structure
         const $card = document.createElement("article")
         $card.classList.add("recipe-card")
@@ -37,8 +35,6 @@ export default class RecipeTemplate {
                 </div>
             </div>
         `.trim()
-
         return $card
-
     }
 }

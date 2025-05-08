@@ -1,33 +1,29 @@
 import Filter from "./controllers/Filter.js"
 import Recipe from "./models/Recipe.js"
 import RecipeTemplate from "./templates/RecipeTemplate.js"
+import FilterTemplate from "./templates/FilterTemplate.js"
 
 
 
+let allIngredients = []
+
+const filter = new Filter(recipes, allIngredients)
 
 
-const filter = new Filter()
-filter.openMenu()
-
-const allIngredients = []
-const allAppliances = []
 
 // display recipes' cards
 recipes.forEach(recipeData => {
     const recipe = new Recipe(recipeData)
 
-    allIngredients.push(...recipe.normalizedIngredients.map(item => item.normalizedName))
-    allAppliances.push(...recipe.normalizedAppliances.map(item => item.normalizedName))
+    allIngredients.push(...recipe.formattedIngredients.map(item => item.name))
 
-    const $card = new RecipeTemplate(recipe).createRecipeCard()
-    document.querySelector(".recipes").appendChild($card)
-})
+    if (recipe.formattedIngredients.some(item => item.name.includes("Banane"))) {
+        const $card = new RecipeTemplate(recipe).createRecipeCard()
+        document.querySelector(".recipes").appendChild($card)
+    }
+});
 
-const uniqueIngredients = [...new Set(allIngredients)].sort((a, b) => a.localeCompare(b))
-const uniqueAppliances = [...new Set(allAppliances)].sort((a, b) => a.localeCompare(b))
+// create filter list AFTER gathering all ingredients
+new FilterTemplate().createFilterList(allIngredients)
 
-const ingredientsHTML = uniqueIngredients.map(ingredient => `<button>${ingredient}</button>`).join("")
-document.querySelector(".choices").innerHTML = ingredientsHTML
-
-const appliancesHTML = uniqueAppliances.map(appliance => `<button>${appliance}</button>`).join("")
-document.querySelector(".appliances").innerHTML = appliancesHTML
+filter.init()
