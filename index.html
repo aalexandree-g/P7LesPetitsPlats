@@ -31,23 +31,53 @@
             <div class="main-sort">
                 <div class="filters">
                     <div class="dropdown">
-                        <div class="options">
-                            <button class="filter-title ingredients" aria-haspopup="true">
+                        <div class="options" data-type="ingredients">
+                            <button class="filter-title" data-type="ingredients" aria-haspopup="true">
                                 <span>Ingrédients</span>
                                 <img class="chevron-icon" src="./assets/icon/chevron.png" alt="Ouvrir le menu">
                             </button>
-                            <div class="filter-search ingredients">
+                            <div class="menu-content">
+                                <div class="filter-search" data-type="ingredients">
+                                    <input>
+                                    <img src="./assets/icon/filters-search.png" class="filter-search-icon" alt="Icône de recherche" aria-hidden="true">
+                                </div>
+                                <div class="filter-choices" data-type="ingredients">
+                                    <!-- templates are displayed here -->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="options" data-type="appliance">
+                            <button class="filter-title" data-type="appliance" aria-haspopup="true">
+                                <span>Appareils</span>
+                                <img class="chevron-icon" src="./assets/icon/chevron.png" alt="Ouvrir le menu">
+                            </button>
+                            <div class="filter-search" data-type="appliance">
                                 <input>
                                 <img src="./assets/icon/filters-search.png" class="filter-search-icon" alt="Icône de recherche" aria-hidden="true">
                             </div>
-                            <div class="filter-choices ingredients">
+                            <div class="filter-choices" data-type="appliance">
+                                <!-- templates are displayed here -->
+                            </div>
+                        </div>
+                        <div class="options" data-type="ustensils">
+                            <button class="filter-title" data-type="ustensils" aria-haspopup="true">
+                                <span>Ustensiles</span>
+                                <img class="chevron-icon" src="./assets/icon/chevron.png" alt="Ouvrir le menu">
+                            </button>
+                            <div class="filter-search" data-type="ustensils">
+                                <input>
+                                <img src="./assets/icon/filters-search.png" class="filter-search-icon" alt="Icône de recherche" aria-hidden="true">
+                            </div>
+                            <div class="filter-choices" data-type="ustensils">
                                 <!-- templates are displayed here -->
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="nb-recipes">
-                    <h2>1500 recettes</h2>
+                    <h2>
+                        <!-- templates are displayed here -->
+                    </h2>
                 </div>
             </div>
             <div class="tag-list">
@@ -58,7 +88,6 @@
             </div>
         </main>
     </div>
-    <script src="./scripts/data/recipes.js"></script>
     <script type="module" src="./scripts/main.js"></script>
 </body>
 </html>

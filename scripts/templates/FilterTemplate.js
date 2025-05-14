@@ -1,6 +1,13 @@
+import { recipes } from "../data/recipes.js"
+import Filter from "../controllers/Filter.js"
+
 export default class FilterTemplate {
     constructor() {
+    }
 
+    displayNbRecipes(nbRecipes) {
+        const text = nbRecipes < 2 ? `${nbRecipes} recette` : `${nbRecipes} recettes`
+        document.querySelector(".nb-recipes h2").textContent = `${text}`
     }
 
     createFilterList(allElements) {
@@ -9,11 +16,14 @@ export default class FilterTemplate {
         // display list of elements
         const elementsHTML = elements.map(item => `<button class="filter-choice" value="${item}">${item}</button>`).join("")
         document.querySelector(".filter-choices").innerHTML = elementsHTML
+        new Filter(recipes, allElements).init()
+        this.displayNbRecipes(recipes.length)
     }
 
     createTag(tag) {
         const $tag = document.createElement("div")
         $tag.classList.add("tag")
+        $tag.dataset.value = tag
         $tag.innerHTML = `<span>${tag}</span>`
 
         const $icon = document.createElement("i")
