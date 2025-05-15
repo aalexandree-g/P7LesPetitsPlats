@@ -10,12 +10,23 @@ export default class FilterTemplate {
         document.querySelector(".nb-recipes h2").textContent = `${text}`
     }
 
-    createFilterList(type, allElements) {
+    createFilterList(type, allElements, activeTags = []) {
         // remove duplicates and sort alphabetically
-        const elements = [...new Set(allElements)].sort((a, b) => a.localeCompare(b))
-        // display list of elements
-        const elementsHTML = elements.map(item => `<button class="filter-choice" value="${item}">${item}</button>`).join("")
-        document.querySelector(`.filter-choices[data-type="${type}"]`).innerHTML = elementsHTML
+        const uniqueElements = [...new Set(allElements)].sort((a, b) => a.localeCompare(b))
+        // group selected elements
+        const selected = uniqueElements
+            .filter(item => activeTags.includes(item))
+            .map(item => `<button class="filter-choice selected" data-type="${type}" value="${item}">${item}</button>`)
+            .join("")
+        // group remaining elements
+        const remaining = uniqueElements
+            .filter(item => !activeTags.includes(item))
+            .map(item => `<button class="filter-choice" data-type="${type}" value="${item}">${item}</button>`)
+            .join("")
+        // display lists of elements
+        document.querySelector(`.filter-choices.selected[data-type="${type}"]`).innerHTML = `${selected}`
+        document.querySelector(`.filter-choices.remaining[data-type="${type}"]`).innerHTML = `${remaining}`
+
         this.displayNbRecipes(recipes.length)
     }
 

@@ -20,7 +20,10 @@ export default class Filter {
         document.querySelectorAll(".options")
             .forEach($element => this.closeMenu($element))
         // only toggle selected menu
-        if (!isOpen) $options.classList.toggle("open")
+        if (!isOpen) {
+            $options.classList.toggle("open")
+            document.querySelector(`.filter-search[data-type="${type}"] input`).focus()
+        }
     }
 
     closeMenu($menu) {
@@ -40,6 +43,7 @@ export default class Filter {
                 return recipe.formattedIngredients.some(item => item.name === tag)
             })
         })
+        this.$recipesContainer.classList.remove("no-result")
         // display recipes or error
         if (filtered.length > 0) {
             filtered.forEach(data => {
@@ -72,11 +76,17 @@ export default class Filter {
         template.displayNbRecipes(this._filteredRecipes.length)     // update number of recipes
         this.displayFilteredRecipes()                               // update recipes
         this.tagCloseEvents()
+        this.refreshFilterChoices()
+    }
+
+    refreshFilterChoices() {
+        new FilterTemplate().createFilterList("ingredients", this._allIngredients, this._activeTags)
+        this.setupEvents()
     }
 
     tagCloseEvents() {
         document.querySelectorAll(".tag").forEach($tag => {
-            // click on tag cross icon
+            // delete tag
             $tag.querySelector(".tag-close-icon").addEventListener("click", () => {
                 const value = $tag.dataset.value
                 document.querySelector(`.filter-choice[value="${value}"]`).classList.remove("active")
@@ -85,6 +95,7 @@ export default class Filter {
                 setTimeout(() => {
                     $tag.remove()
                     this._activeTags = this._activeTags.filter(t => t !== value)
+                    this.refreshFilterChoices()
                     if (this._activeTags.length === 0) {
                         this.$recipesContainer.classList.remove("down")
                     }
@@ -92,6 +103,7 @@ export default class Filter {
                 }, 200)
             })
         })
+        this.setupEvents()
     }
 
     filterMenuItems(type, inputValue) {
@@ -107,16 +119,15 @@ export default class Filter {
         const $input = $menu.querySelector("input")
         const $icon = $menu.querySelector(".tag-close-icon")
         const type = $menu.dataset.type
-    
+        // reset input
         if ($input) $input.value = ""
         if ($icon) $icon.classList.remove("visible")
-    
-        document
-            .querySelectorAll(`.filter-choices[data-type="${type}"] .filter-choice`)
-            .forEach($btn => $btn.classList.remove("hidden"))
+        // display all elements' menu
+        document.querySelectorAll(`.filter-choices[data-type="${type}"] .filter-choice`).forEach($btn => {
+            $btn.classList.remove("hidden")
+        })
     }
     
-
     setupSearchInput($inputBlock) {
         const $input = $inputBlock.querySelector("input")
         const $icon = $inputBlock.querySelector(".tag-close-icon")
@@ -148,7 +159,9 @@ export default class Filter {
         document.querySelectorAll(".filter-choice").forEach($choice => {
             $choice.addEventListener("click", (e) => {
                 this.filterByActiveTags(e.target.value)
-                this.closeMenu($choice.closest(".options"))
+                const type = $choice.dataset.type
+                const $menu = document.querySelector(`.options[data-type="${type}"]`)
+                this.closeMenu($menu)
             })
         })
         // input (search)

@@ -7,6 +7,7 @@ import FilterTemplate from "./templates/FilterTemplate.js"
 
 
 let allIngredients = []
+let activeTags = []
 
 recipes.forEach(data => {
 
@@ -23,7 +24,7 @@ recipes.forEach(data => {
 })
 
 
-new FilterTemplate().createFilterList("ingredients", allIngredients)
+new FilterTemplate().createFilterList("ingredients", allIngredients, activeTags)
 
 
 new Filter(recipes, allIngredients).init()
