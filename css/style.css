@@ -186,8 +186,21 @@ body {
     border: 1px solid #C6C6C6;
     margin: 0rem 1rem;
 }
-.dropdown .filter-search-icon {
-    margin: 0rem 0.7rem;
+.dropdown .search-icons {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0rem 0.5rem;
+}
+.dropdown .search-icons .tag-close-icon {
+    display: none;
+    color: #C6C6C6;
+    font-size: 0.8rem;
+}
+.dropdown .search-icons .tag-close-icon.visible {
+    display: block;
+}
+.dropdown .search-icons img {
     height: 0.9rem;
 }
 .dropdown .filter-search input,
@@ -203,6 +216,8 @@ body {
 .dropdown .filter-choices {
     display: flex;
     flex-direction: column;
+    justify-content: flex-start;
+    gap: 0rem;
     overflow-y: auto;
     max-height: 12rem;
 }
@@ -210,11 +225,15 @@ body {
     position: relative;
     display: block;
     padding: 0.5rem 1rem;
+    height: auto;
     text-align: left;
     font-size: 0.9rem;
     color: #1B1B1B;
     cursor: pointer;
     z-index: 1;
+}
+.dropdown .filter-choice.hidden {
+    display: none;
 }
 .dropdown .filter-choice::before {
     content: "";

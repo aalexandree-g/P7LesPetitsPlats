@@ -10,13 +10,12 @@ export default class FilterTemplate {
         document.querySelector(".nb-recipes h2").textContent = `${text}`
     }
 
-    createFilterList(allElements) {
+    createFilterList(type, allElements) {
         // remove duplicates and sort alphabetically
         const elements = [...new Set(allElements)].sort((a, b) => a.localeCompare(b))
         // display list of elements
         const elementsHTML = elements.map(item => `<button class="filter-choice" value="${item}">${item}</button>`).join("")
-        document.querySelector(".filter-choices").innerHTML = elementsHTML
-        new Filter(recipes, allElements).init()
+        document.querySelector(`.filter-choices[data-type="${type}"]`).innerHTML = elementsHTML
         this.displayNbRecipes(recipes.length)
     }
 
