@@ -7,6 +7,7 @@ import FilterTemplate from "./templates/FilterTemplate.js"
 
 
 let allIngredients = []
+let activeIngredients = []
 
 recipes.forEach(data => {
 

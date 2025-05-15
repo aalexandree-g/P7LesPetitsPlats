@@ -6,6 +6,7 @@ export default class Filter {
     constructor(recipes, allIngredients) {
         this._recipes = recipes
         this._filteredRecipes = this._recipes
+        this._$recipesContainer = document.querySelector(".recipes")
         this._activeTags = []
         this._allIngredients = allIngredients
     }
@@ -31,9 +32,8 @@ export default class Filter {
     
     displayFilteredRecipes() {
         // empty recipes
-        const $recipesContainer = document.querySelector(".recipes")
-        document.querySelector(".recipes").classList.remove("no-result")
-        $recipesContainer.innerHTML = ""
+        this._$recipesContainer.classList.remove("no-result")
+        this._$recipesContainer.innerHTML = ""
         // apply tags
         let filteredRecipes = this._recipes
         this._activeTags.forEach(tag => {
@@ -47,10 +47,10 @@ export default class Filter {
             filteredRecipes.forEach(data => {
                 const recipe = new Recipe(data)
                 const $card = new RecipeTemplate(recipe).createRecipeCard()
-                $recipesContainer.appendChild($card)
+                this._$recipesContainer.appendChild($card)
             })
         } else {
-            $recipesContainer.innerHTML = `
+            this._$recipesContainer.innerHTML = `
                 <p>Aucune recette ne contient les filtres sélectionnés.</p>
             `
             document.querySelector(".recipes").classList.add("no-result")
@@ -61,20 +61,20 @@ export default class Filter {
         new FilterTemplate().displayNbRecipes(filteredRecipes.length)
     }
 
-    filterByActiveTags(inputTag) {  
-        const $recipesContainer = document.querySelector(".recipes")
+    filterByActiveTags(inputTag) {
         // if tag already exists
         if (this._activeTags.includes(inputTag)) { return }
         // if not, add to activeTags array
         this._activeTags.push(inputTag)
+        // change choice color in list
+        document.querySelector(`.filter-choice[value="${inputTag}"`).classList.add("active")
         // animation
         if (this._activeTags.length === 1) {
-            $recipesContainer.classList.add("down")
+            this._$recipesContainer.classList.add("down")
         }
         // display tags
         const filterTemplate = new FilterTemplate()
         filterTemplate.createTag(inputTag)
-        document.querySelector(".tag-list").classList.add("visible")
         // update number of recipes
         filterTemplate.displayNbRecipes(this._filteredRecipes.length)
         // update recipes
@@ -89,7 +89,7 @@ export default class Filter {
                     this._activeTags = this._activeTags.filter(t => t !== value)
                     // animation
                     if (this._activeTags.length === 0) {
-                        $recipesContainer.classList.remove("down")
+                        this._$recipesContainer.classList.remove("down")
                     }
                     setTimeout(() => {
                         this.displayFilteredRecipes()

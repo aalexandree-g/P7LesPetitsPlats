@@ -21,15 +21,12 @@ export default class FilterTemplate {
     }
 
     createTag(tag) {
-        const $tag = document.createElement("div")
-        $tag.classList.add("tag")
-        $tag.dataset.value = tag
-        $tag.innerHTML = `<span>${tag}</span>`
-
-        const $icon = document.createElement("i")
-        $icon.classList.add("fa-solid", "fa-xmark", "tag-close-icon")
-        $tag.appendChild($icon)
-
-        document.querySelector(".tag-list").appendChild($tag)
+        const $tag = `
+            <div class="tag" data-value="${tag}">
+                <span>${tag}</span>
+                <i class="fa-solid fa-xmark tag-close-icon"></i>
+            </div>
+        `
+        document.querySelector(".tag-list").innerHTML += $tag
     }
 }

@@ -238,9 +238,6 @@ body {
     justify-content: flex-start;
     width: 100%;
 }
-.tag-list.visible {
-
-}
 .tag-list .tag {
     display: flex;
     justify-content: space-between;
@@ -252,7 +249,7 @@ body {
     background-color: #FFD15B;
     padding: 0.5rem 1rem;
     opacity: 1;
-    transition: opacity 200ms ease;
+    transition: opacity 250ms ease-in-out;
 }
 .tag-list .tag.fading-out {
     opacity: 0;
