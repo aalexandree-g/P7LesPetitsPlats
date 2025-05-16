@@ -102,8 +102,8 @@ export default class Filter {
                     setTimeout(() => this.displayFilteredRecipes(), 220)
                 }, 200)
             })
+            this.setupEvents()
         })
-        this.setupEvents()
     }
 
     filterMenuItems(type, inputValue) {
