@@ -22,4 +22,11 @@ export default class FiltersTemplate {
         $tag.innerHTML = html
         return $tag
     }
+
+    updateRecipeCount(count) {
+        const recipeCount = count < 2 ? `${count} recette` : `${count} recettes`
+        const $h2 = document.createElement("h2")
+        $h2.textContent = recipeCount
+        document.querySelector(".recipe-count").appendChild($h2)
+    }
 }
