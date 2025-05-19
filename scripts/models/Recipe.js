@@ -1,4 +1,5 @@
 export default class Recipe {
+
     constructor(recipe) {
         this._id = recipe.id
         this._image = recipe.image
@@ -40,4 +41,5 @@ export default class Recipe {
             return element.toLowerCase()
         })
     }
+    
 }

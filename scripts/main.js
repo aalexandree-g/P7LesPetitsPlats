@@ -12,8 +12,6 @@ allRecipes.forEach(recipe => {
     document.querySelector(".recipes").appendChild($card)
 })
 
-const menu = new Menu()
-menu.init()
 
 const filters = new Filters(allRecipes)
 filters.init()

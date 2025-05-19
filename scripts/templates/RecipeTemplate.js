@@ -1,6 +1,7 @@
 import { capitalize } from "../utils/stringUtils.js"
 
 export default class RecipeTemplate {
+
     constructor(recipe) {
         this._recipe = recipe
     }
@@ -41,4 +42,5 @@ export default class RecipeTemplate {
         `.trim()
         return $card
     }
+    
 }

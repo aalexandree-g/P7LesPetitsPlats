@@ -1,5 +1,4 @@
 export default class FiltersTemplate {
-    constructor() {}
 
     createFilter(type, item, selected = false) {
         const $filter = document.createElement("button")
@@ -29,4 +28,13 @@ export default class FiltersTemplate {
         $h2.textContent = recipeCount
         document.querySelector(".recipe-count").appendChild($h2)
     }
+
+    zeroRecipeError() {
+        const $p = document.createElement("p")
+        $p.textContent = "Aucune recette ne contient les filtres sélectionnés."
+        const $recipesContainer = document.querySelector(".recipes")
+        $recipesContainer.classList.add("no-result")
+        $recipesContainer.appendChild($p)
+    }
+
 }
