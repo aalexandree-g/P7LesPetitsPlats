@@ -2,6 +2,7 @@ import { capitalize } from "../utils/stringUtils.js"
 import TagTemplate from "../templates/TagTemplate.js"
 
 export default class Tag {
+    
     constructor(label) {
         this._label = label
     }

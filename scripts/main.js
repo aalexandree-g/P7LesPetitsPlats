@@ -13,5 +13,6 @@ allRecipes.forEach(recipe => {
 })
 
 
-const filters = new Filters(allRecipes)
-filters.init()
+const filtersIngredients = new Filters(allRecipes, "ingredients")
+
+filtersIngredients.init()

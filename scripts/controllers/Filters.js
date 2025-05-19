@@ -4,15 +4,17 @@ import FiltersTemplate from "../templates/FiltersTemplate.js"
 import Tag from "./Tag.js"
 import TagTemplate from "../templates/TagTemplate.js"
 import Menu from "./Menu.js"
+import MenuTemplate from "../templates/MenuTemplate.js"
 
 export default class Filters {
 
-    constructor(recipes) {
+    constructor(recipes, type) {
         this._recipes = recipes
+        this._type = type
         this._activeFilters = []
         this.$recipesContainer = document.querySelector(".recipes")
         this.updateDisplay()
-        this._menu = new Menu()
+        this._menu = new Menu(type)
         this._menu.init()
     }
 
@@ -55,10 +57,15 @@ export default class Filters {
         const ingredients = this._recipes.flatMap(r => r.ingredients.map(i => i.name))
         // remove duplicates and sort alphabetically
         const uniqueIngredients = [...new Set(ingredients)].sort((a, b) => a.localeCompare(b, "fr"))
+        
+        
+     
+        
+        
         // create filter list
         uniqueIngredients.forEach(ingredient => {
             const $btn = new FiltersTemplate().createFilter("ingredients", capitalize(ingredient))
-            document.querySelector(".filter-list").appendChild($btn)
+            document.querySelector(`.filter-list[data-type="${this._type}"`).appendChild($btn)
             $btn.addEventListener("click", () => {
                 // close menu
                 const $menu = $btn.closest(".menu")
