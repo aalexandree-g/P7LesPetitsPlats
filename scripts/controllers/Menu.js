@@ -1,7 +1,6 @@
 export default class Menu {
 
-    constructor(type) {
-        this._type = type
+    constructor() {
     }
 
     toggleMenu(type) {
@@ -14,8 +13,9 @@ export default class Menu {
     }
 
     closeMenu($menu) {
+        const type = $menu.dataset.type
         $menu.classList.remove("open")
-        this.resetInput($menu)
+        this.resetInput(type, $menu)
     }
 
     getSearchElements($menu) {
@@ -26,39 +26,40 @@ export default class Menu {
     }
 
     initSearch($menu) {
+        const type = $menu.dataset.type
         const { $input, $icon } = this.getSearchElements($menu)
         if (!$input) return
         // display search cross icon
         $input.addEventListener("input", () => {
             const value = $input.value
             if ($icon) $icon.classList.toggle("visible", value !== "")
-            this.searchItems(value)
+            this.searchItems(type, value)
         })
         // reset input
         if ($icon) {
             $icon.addEventListener("click", () => {
-                this.resetInput($menu)
+                this.resetInput(type, $menu)
                 $input.focus()
             })
         }
     }
 
-    searchItems(inputValue) {
+    searchItems(type, inputValue) {
         const normalized = str => str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase()
         const value = normalized(inputValue)
-        document.querySelectorAll(`.filter-list[data-type="${this._type}"] .filter`).forEach($btn => {
+        document.querySelectorAll(`.filter-list[data-type="${type}"] .filter`).forEach($btn => {
             const text = normalized($btn.textContent)
             $btn.classList.toggle("hidden", !text.includes(value))
         })
     }
 
-    resetInput($menu) {
+    resetInput(type, $menu) {
         const { $input, $icon } = this.getSearchElements($menu)
         // reset input
         if ($input) $input.value = ""
         if ($icon) $icon.classList.remove("visible")
         // display all elements' menu
-        document.querySelectorAll(`.filter-list[data-type="${this._type}"] .filter`).forEach($btn => {
+        document.querySelectorAll(`.filter-list[data-type="${type}"] .filter`).forEach($btn => {
             $btn.classList.remove("hidden")
         })
     }
@@ -66,14 +67,12 @@ export default class Menu {
     init() {
         document.querySelectorAll(".menu-title").forEach($title => {
             $title.addEventListener("click", () => {
-                this.toggleMenu($title.dataset.type)
-            })
-        })
-        document.querySelectorAll(".filter-search input").forEach($input => {
-            const type = $input.closest(".filter-search").dataset.type
-            if (!type) return
-            $input.addEventListener("input", () => {
-                this.searchItems(type, $input.value)
+                const clickedType = $title.dataset.type
+                // close other menus
+                document.querySelectorAll(".menu").forEach($menu => {
+                    if ($menu.dataset.type !== clickedType) this.closeMenu($menu)
+                })
+                this.toggleMenu(clickedType)
             })
         })
         document.querySelectorAll(".menu").forEach($menu => {

@@ -13,6 +13,4 @@ allRecipes.forEach(recipe => {
 })
 
 
-const filtersIngredients = new Filters(allRecipes, "ingredients")
-
-filtersIngredients.init()
+new Filters(allRecipes).init()

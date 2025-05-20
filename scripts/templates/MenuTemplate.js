@@ -1,4 +1,5 @@
 import { capitalize } from "../utils/stringUtils.js"
+import { sortListAlphabetically } from "../utils/stringUtils.js"
 
 export default class MenuTemplate {
 
@@ -10,6 +11,8 @@ export default class MenuTemplate {
         const $remaining = document.createElement("div")
         $selected.classList.add("selected-list")
         $remaining.classList.add("remaining-list")
+        $selected.dataset.type = type
+        $remaining.dataset.type = type
         uniqueElements.forEach(item => {
             const $btn = document.createElement("button")
             $btn.classList.add("filter")
