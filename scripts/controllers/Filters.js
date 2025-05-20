@@ -8,7 +8,7 @@ import MenuTemplate from "../templates/MenuTemplate.js"
 
 export default class Filters {
 
-    constructor(recipes, type) {
+    constructor(recipes) {
         this._recipes = recipes
         this._types = ["ingredients", "appliance", "ustensils"]
         this._activeFilters = []
@@ -28,26 +28,46 @@ export default class Filters {
     }
 
     createTag(type, element) {
-        // filter already exists = ignore
-        if (this._activeFilters.includes(element)) return
-        // create tag
-        const $tag = new Tag(element).render()
-        this._activeFilters.push(element)
-        // click on close icon
-        $tag.querySelector(".tag-close-icon").addEventListener("click", () => {
-            // animation
-            new TagTemplate().fadeOutAnimation($tag)
-            // remove from active filters
-            const $btn = document.querySelector(`.filter[value="${element}"]`)
-            $btn.classList.remove("selected")
-            this._activeFilters = this._activeFilters.filter(tag => tag !== element)
-            // move to remaining filters
-            const $remaining = document.querySelector(`.remaining-list[data-type="${type}"]`)
-            $remaining.appendChild($btn)
-            sortListAlphabetically($remaining)
-            setTimeout(() => this.updateDisplay(), 350)
-        })
+    // filter already exists = ignore
+    if (this._activeFilters.includes(element)) return
+
+    // create tag
+    const $tag = new Tag(element).render()
+    this._activeFilters.push(element)
+
+    // show selected list
+    const $selected = document.querySelector(`.selected-list[data-type="${type}"]`)
+    if ($selected) {
+        $selected.classList.remove("hidden")
     }
+
+    const deleteTag = ($tag) => {
+        new TagTemplate().fadeOutAnimation($tag)
+
+        // remove from active filters
+        const $btn = document.querySelector(`.filter[value="${element}"]`)
+        $btn.classList.remove("selected")
+        this._activeFilters = this._activeFilters.filter(tag => tag !== element)
+
+        // move back to remaining list
+        const $remaining = document.querySelector(`.remaining-list[data-type="${type}"]`)
+        $remaining.appendChild($btn)
+        sortListAlphabetically($remaining)
+
+        // hide selected list if empty
+        if ($selected && $selected.children.length === 0) {
+            $selected.classList.add("hidden")
+        }
+
+        setTimeout(() => this.updateDisplay(), 350)
+    }
+
+    // click on close icon
+    $tag.querySelector(".tag-close-icon").addEventListener("click", () => {
+        deleteTag($tag)
+    })
+}
+
 
     updateDisplay() {
         this.$recipesContainer.classList.remove("no-result")
@@ -80,28 +100,22 @@ export default class Filters {
             // delete duplicates and sort alphabetically
             const uniqueIngredients = [...new Set(elements)].sort((a, b) => a.localeCompare(b, "fr"))
             new MenuTemplate().createFilterLists(type, uniqueIngredients, this._activeFilters)
-
             document.querySelectorAll(`.filter-list[data-type="${type}"] .filter`).forEach($btn => {
-            const element = $btn.value
-            $btn.addEventListener("click", () => {
-                // close menu
-                const $menu = $btn.closest(".menu")
-                if ($menu) this._menu.closeMenu($menu)
-                // create tag
-                this.createTag(type, element)
-                this.updateDisplay()
-                // add filter to selected list
-                const $selected = document.querySelector(`.selected-list[data-type="${type}"]`)
-                $btn.classList.add("selected")
-                $selected.appendChild($btn)
+                const element = $btn.value
+                $btn.addEventListener("click", () => {
+                    // close menu
+                    const $menu = $btn.closest(".menu")
+                    if ($menu) this._menu.closeMenu($menu)
+                    // create tag
+                    this.createTag(type, element)
+                    this.updateDisplay()
+                    // add filter to selected list
+                    $btn.classList.add("selected")
+                    const $selected = document.querySelector(`.selected-list[data-type="${type}"]`)
+                    $selected.appendChild($btn)
+                })
             })
-        })
-        })
-
-
-        
-
-        
+        })   
     }
 
 }

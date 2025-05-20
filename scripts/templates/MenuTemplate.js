@@ -1,5 +1,4 @@
-import { capitalize } from "../utils/stringUtils.js"
-import { sortListAlphabetically } from "../utils/stringUtils.js"
+import FiltersTemplate from "./FiltersTemplate.js"
 
 export default class MenuTemplate {
 
@@ -9,21 +8,17 @@ export default class MenuTemplate {
         $container.innerHTML = ""
         const $selected = document.createElement("div")
         const $remaining = document.createElement("div")
-        $selected.classList.add("selected-list")
+        $selected.classList.add("selected-list", "hidden")
         $remaining.classList.add("remaining-list")
         $selected.dataset.type = type
         $remaining.dataset.type = type
         uniqueElements.forEach(item => {
-            const $btn = document.createElement("button")
-            $btn.classList.add("filter")
-            $btn.value = item
-            $btn.textContent = capitalize(item)
-
+            const $filter = new FiltersTemplate().createFilter(type, item)
             if (activeFilters.includes(item)) {
-                $btn.classList.add("selected")
-                $selected.appendChild($btn)
+                $filter.classList.add("selected")
+                $selected.appendChild($filter)
             } else {
-                $remaining.appendChild($btn)
+                $remaining.appendChild($filter)
             }
         })
         $container.appendChild($selected)

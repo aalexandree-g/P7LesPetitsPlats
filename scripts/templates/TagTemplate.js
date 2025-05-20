@@ -1,3 +1,5 @@
+import { capitalize } from "../utils/stringUtils.js"
+
 export default class TagTemplate {
 
     constructor() {
@@ -8,11 +10,16 @@ export default class TagTemplate {
         const $tag = document.createElement("div")
         $tag.classList.add("tag")
         $tag.dataset.value = label
-        const html = `
-            <span>${label}</span>
-            <i class="fa-solid fa-xmark tag-close-icon"></i>
-        `.trim()
-        $tag.innerHTML = html
+
+        const $span = document.createElement("span")
+        $span.textContent = capitalize(label)
+
+        const $icon = document.createElement("i")
+        $icon.classList.add("fa-solid", "fa-xmark", "tag-close-icon")
+
+        $tag.appendChild($span)
+        $tag.appendChild($icon)
+
         return $tag
     }
 

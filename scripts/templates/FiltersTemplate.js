@@ -1,3 +1,5 @@
+import { capitalize } from "../utils/stringUtils.js"
+
 export default class FiltersTemplate {
 
     createFilter(type, item) {
@@ -5,7 +7,17 @@ export default class FiltersTemplate {
         $filter.classList.add("filter")
         $filter.dataset.type = type
         $filter.value = item
-        $filter.textContent = item
+
+        const $span = document.createElement("span")
+        $span.textContent = capitalize(item)
+
+        const $icon = document.createElement("i")
+        $icon.classList.add("fa-solid", "fa-circle-xmark", "filter-close-icon")
+        $icon.dataset.value = item
+
+        $filter.appendChild($span)
+        $filter.appendChild($icon)
+
         return $filter
     }
 
