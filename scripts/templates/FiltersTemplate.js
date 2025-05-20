@@ -1,9 +1,8 @@
 export default class FiltersTemplate {
 
-    createFilter(type, item, selected = false) {
+    createFilter(type, item) {
         const $filter = document.createElement("button")
         $filter.classList.add("filter")
-        if (selected) $filter.classList.add("selected")
         $filter.dataset.type = type
         $filter.value = item
         $filter.textContent = item

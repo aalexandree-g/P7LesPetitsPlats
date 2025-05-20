@@ -1,4 +1,3 @@
-import { capitalize } from "../utils/stringUtils.js"
 import RecipeTemplate from "../templates/RecipeTemplate.js"
 import FiltersTemplate from "../templates/FiltersTemplate.js"
 import Tag from "./Tag.js"
@@ -19,11 +18,20 @@ export default class Filters {
     }
 
     createTag(ingredient) {
+        // filter already exists = ignore
+        if (this._activeFilters.includes(ingredient)) return
+        // create tag
         const $tag = new Tag(ingredient).render()
+        this._activeFilters.push(ingredient)
+        // click on close icon
         $tag.querySelector(".tag-close-icon").addEventListener("click", () => {
-            const template = new TagTemplate()
-            template.fadeOutAnimation($tag)
+            // animation
+            new TagTemplate().fadeOutAnimation($tag)
+            // remove from active filters
+            const $btn = document.querySelector(`.filter[value="${ingredient}"]`)
+            $btn.classList.remove("selected")
             this._activeFilters = this._activeFilters.filter(tag => tag !== ingredient)
+            document.querySelector(".remaining-list").appendChild($btn)
             setTimeout(() => this.updateDisplay(), 350)
         })
     }
@@ -55,26 +63,24 @@ export default class Filters {
     init() {
         // get all ingredients from all recipes
         const ingredients = this._recipes.flatMap(r => r.ingredients.map(i => i.name))
-        // remove duplicates and sort alphabetically
+        // delete duplicates and sort alphabetically
         const uniqueIngredients = [...new Set(ingredients)].sort((a, b) => a.localeCompare(b, "fr"))
-        
-        
-     
-        
-        
-        // create filter list
-        uniqueIngredients.forEach(ingredient => {
-            const $btn = new FiltersTemplate().createFilter("ingredients", capitalize(ingredient))
-            document.querySelector(`.filter-list[data-type="${this._type}"`).appendChild($btn)
+
+        new MenuTemplate().createFilterLists(this._type, uniqueIngredients, this._activeFilters)
+
+        document.querySelectorAll(`.filter-list[data-type="${this._type}"] .filter`).forEach($btn => {
+            const ingredient = $btn.value
             $btn.addEventListener("click", () => {
                 // close menu
                 const $menu = $btn.closest(".menu")
                 if ($menu) this._menu.closeMenu($menu)
-                // filter already exists = ignore
-                if (this._activeFilters.includes(ingredient)) return
-                this._activeFilters.push(ingredient)
+                // create tag
                 this.createTag(ingredient)
                 this.updateDisplay()
+                // add filter to selected list
+                const $selected = document.querySelector(".selected-list")
+                $btn.classList.add("selected")
+                $selected.appendChild($btn)
             })
         })
     }

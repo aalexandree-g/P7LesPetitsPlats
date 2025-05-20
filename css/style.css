@@ -216,10 +216,16 @@ main {
 .menus .filter-list {
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
-    gap: 0rem;
+    gap: 1rem;
     overflow-y: auto;
     max-height: 12rem;
+}
+.menu .filter-list .selected-list,
+.menu .filter-list .remaining-list {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 0rem;
 }
 .menus .filter {
     position: relative;
