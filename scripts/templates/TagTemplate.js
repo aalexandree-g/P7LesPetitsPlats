@@ -1,11 +1,6 @@
 import { capitalize } from "../utils/stringUtils.js"
-import Tag from "../controllers/Tag.js"
 
 export default class TagTemplate {
-
-    constructor() {
-        this.$recipesContainer = document.querySelector(".recipes")
-    }
 
     createTag(type, label) {
         const $tag = document.createElement("div")

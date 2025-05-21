@@ -2,10 +2,6 @@ import FiltersTemplate from "./FiltersTemplate.js"
 
 export default class MenuTemplate {
 
-    constructor(type) {
-        this._type = type
-    }
-
     renderFilterLists(type, selectedList, remainingList) {
 
         const $filterList = document.querySelector(`.filter-list[data-type="${type}"]`)

@@ -1,5 +1,4 @@
 import Filters from "./controllers/Filters.js"
-import Menu from "./controllers/Menu.js"
 import { recipes } from "./data/recipes.js"
 import Recipe from "./models/Recipe.js"
 import RecipeTemplate from "./templates/RecipeTemplate.js"

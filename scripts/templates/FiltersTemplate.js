@@ -31,6 +31,7 @@ export default class FiltersTemplate {
     zeroRecipeError() {
         const $p = document.createElement("p")
         $p.textContent = "Aucune recette ne contient les filtres sélectionnés."
+        
         const $recipesContainer = document.querySelector(".recipes")
         $recipesContainer.classList.add("no-result")
         $recipesContainer.appendChild($p)

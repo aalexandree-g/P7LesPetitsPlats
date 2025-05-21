@@ -152,14 +152,17 @@ export default class Filters {
     }
 
     setupTagCloseEvents() {
+
         document.querySelectorAll(".tag-close-icon").forEach($icon => {
             $icon.addEventListener("click", (e) => {
                 const $tag = e.target.closest(".tag")
                 const value = $tag.dataset.value
                 const type = this._types.find(t => this._filters[t].selected.includes(value))
+                
                 if (type) this.deleteTag(type, value)
             })
         })
+
     }
 
     init() {
