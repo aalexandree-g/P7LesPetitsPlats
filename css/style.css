@@ -288,12 +288,8 @@ main {
     opacity: 0;
     transition: opacity 150ms ease-in-out;
 }
-.tag-list .tag.showing,
 .tag-list .tag.visible {
     opacity: 1;
-}
-.tag-list .tag.hidding {
-    opacity: 0;
 }
 .tag-close-icon {
     font-size: 1.2rem;

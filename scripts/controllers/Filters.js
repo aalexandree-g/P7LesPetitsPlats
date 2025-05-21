@@ -1,7 +1,5 @@
-import { sortListAlphabetically } from "../utils/stringUtils.js"
 import RecipeTemplate from "../templates/RecipeTemplate.js"
 import FiltersTemplate from "../templates/FiltersTemplate.js"
-import Tag from "./Tag.js"
 import TagTemplate from "../templates/TagTemplate.js"
 import Menu from "./Menu.js"
 import MenuTemplate from "../templates/MenuTemplate.js"
@@ -11,11 +9,16 @@ export default class Filters {
     constructor(recipes) {
         this._recipes = recipes
         this._types = ["ingredients", "appliance", "ustensils"]
-        this._activeFilters = []
+        this._filters = { 
+            ingredients: { selected: [], remaining: [] },
+            appliance: { selected: [], remaining: [] },
+            ustensils: { selected: [], remaining: [] }
+        }
         this.$recipesContainer = document.querySelector(".recipes")
         this.updateDisplay()
         this._menu = new Menu()
         this._menu.init()
+        this._menuTemplate = new MenuTemplate()
     }
 
     getElementsByType(type) {
@@ -27,61 +30,95 @@ export default class Filters {
         })
     }
 
-    createTag(type, element) {
-    // filter already exists = ignore
-    if (this._activeFilters.includes(element)) return
-
-    // create tag
-    const $tag = new Tag(element).render()
-    this._activeFilters.push(element)
-
-    // show selected list
-    const $selected = document.querySelector(`.selected-list[data-type="${type}"]`)
-    if ($selected) {
-        $selected.classList.remove("hidden")
+    // get active filters from all types
+    get allActiveFilters() {
+        return this._types.flatMap(type =>
+            this._filters[type].selected.map(label => ({ type, label }))
+        )
     }
 
-    const deleteTag = ($tag) => {
-        new TagTemplate().fadeOutAnimation($tag)
+    createTag(type, element) {
 
-        // remove from active filters
-        const $btn = document.querySelector(`.filter[value="${element}"]`)
-        $btn.classList.remove("selected")
-        this._activeFilters = this._activeFilters.filter(tag => tag !== element)
+        const selected = this._filters[type].selected
+        const remaining = this._filters[type].remaining
 
-        // move back to remaining list
-        const $remaining = document.querySelector(`.remaining-list[data-type="${type}"]`)
-        $remaining.appendChild($btn)
-        sortListAlphabetically($remaining)
+        // filter already exists = ignore
+        if (selected.includes(element)) return
 
+        // move filter to selected list
+        this._filters[type].remaining = remaining.filter(tag => tag !== element)
+        selected.push(element)
+        selected.sort((a, b) => a.localeCompare(b, "fr"))
+
+        // show selected list
+        const $selected = document.querySelector(`.selected-list[data-type="${type}"]`)
+        if ($selected) { $selected.classList.remove("hidden") }
+
+        // display lists
+        this._menuTemplate.renderFilterLists(type, selected, this._filters[type].remaining)
+        this.setupClickEvents(type)
+
+        // display tags
+        new TagTemplate().renderTags(this.allActiveFilters)
+        this.setupTagCloseEvents()
+
+        // refresh recipes
+        this.updateDisplay()
+
+    }
+
+    deleteTag(type, element) {
+
+        const selected = this._filters[type].selected
+        const remaining = this._filters[type].remaining
+
+        // move filter to remaining list
+        this._filters[type].selected = selected.filter(tag => tag !== element)
+        remaining.push(element)
+        remaining.sort((a, b) => a.localeCompare(b, "fr"))
+        
         // hide selected list if empty
-        if ($selected && $selected.children.length === 0) {
-            $selected.classList.add("hidden")
+        if (this._filters[type].selected.length === 0) {
+            const $selected = document.querySelector(`.selected-list[data-type="${type}"]`)
+            if ($selected) { $selected.classList.add("hidden") }
         }
 
+        // display lists
+        this._menuTemplate.renderFilterLists(type, this._filters[type].selected, remaining)
+        this.setupClickEvents(type)
+
+        // display tags
+        new TagTemplate().renderTags(this.allActiveFilters)
+        this.setupTagCloseEvents()
+
+        // refresh recipes
         setTimeout(() => this.updateDisplay(), 350)
+
     }
 
-    // click on close icon
-    $tag.querySelector(".tag-close-icon").addEventListener("click", () => {
-        deleteTag($tag)
-    })
-}
-
-
     updateDisplay() {
+
         this.$recipesContainer.classList.remove("no-result")
+
+        const selectedLabels = this.allActiveFilters.map(f => f.label)
+
         // keep recipes matching tags
         const filtered = this._recipes.filter(recipe =>
-            this._activeFilters.every(tag =>
-                recipe.ingredients.some(i => i.name === tag)
+            selectedLabels.every(label =>
+                recipe.ingredients.some(i => i.name === label) ||
+                recipe.appliance === label ||
+                recipe.ustensils.includes(label)
             )
         )
-        // display number of recipes
+
+        // empty old recipes
         this.$recipesContainer.innerHTML = ""
         document.querySelector(".recipe-count").innerHTML = ""
+
+        // display number of recipes
         const recipeCountTemplate = new FiltersTemplate()
         recipeCountTemplate.updateRecipeCount(filtered.length)
+
         // display filtered recipes
         if (filtered.length > 0) {
             filtered.forEach(recipe => {
@@ -91,31 +128,50 @@ export default class Filters {
         } else {
             recipeCountTemplate.zeroRecipeError()
         }
+
+    }
+
+    setupClickEvents(type) {
+
+        document.querySelectorAll(`.filter-list[data-type="${type}"] .filter`).forEach($btn => {
+            const $menu = $btn.closest(".menu")
+            const value = $btn.value
+
+            $btn.addEventListener("click", () => {
+                if ($menu) this._menu.closeMenu($menu)
+                this.createTag(type, value)
+            })
+
+            $btn.querySelector(".filter-close-icon").addEventListener("click", (e) => {
+                e.stopPropagation()
+                if ($menu) this._menu.closeMenu($menu)
+                this.deleteTag(type, value)
+            })
+
+        })
+    }
+
+    setupTagCloseEvents() {
+        document.querySelectorAll(".tag-close-icon").forEach($icon => {
+            $icon.addEventListener("click", (e) => {
+                const $tag = e.target.closest(".tag")
+                const value = $tag.dataset.value
+                const type = this._types.find(t => this._filters[t].selected.includes(value))
+                if (type) this.deleteTag(type, value)
+            })
+        })
     }
 
     init() {
         // get all elements by type from all recipes
         this._types.forEach(type => {
-            const elements = this.getElementsByType(type)
             // delete duplicates and sort alphabetically
-            const uniqueIngredients = [...new Set(elements)].sort((a, b) => a.localeCompare(b, "fr"))
-            new MenuTemplate().createFilterLists(type, uniqueIngredients, this._activeFilters)
-            document.querySelectorAll(`.filter-list[data-type="${type}"] .filter`).forEach($btn => {
-                const element = $btn.value
-                $btn.addEventListener("click", () => {
-                    // close menu
-                    const $menu = $btn.closest(".menu")
-                    if ($menu) this._menu.closeMenu($menu)
-                    // create tag
-                    this.createTag(type, element)
-                    this.updateDisplay()
-                    // add filter to selected list
-                    $btn.classList.add("selected")
-                    const $selected = document.querySelector(`.selected-list[data-type="${type}"]`)
-                    $selected.appendChild($btn)
-                })
-            })
-        })   
+            const elements = this.getElementsByType(type)
+            const unique = [...new Set(elements)].sort((a, b) => a.localeCompare(b, "fr"))
+            this._filters[type] = { selected: [], remaining: unique }
+            this._menuTemplate.renderFilterLists(type, [], unique)
+            this.setupClickEvents(type)
+        })
     }
 
 }

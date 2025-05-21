@@ -1,4 +1,5 @@
 import { capitalize } from "../utils/stringUtils.js"
+import Tag from "../controllers/Tag.js"
 
 export default class TagTemplate {
 
@@ -6,10 +7,11 @@ export default class TagTemplate {
         this.$recipesContainer = document.querySelector(".recipes")
     }
 
-    createTag(label) {
+    createTag(type, label) {
         const $tag = document.createElement("div")
         $tag.classList.add("tag")
         $tag.dataset.value = label
+        $tag.dataset.type = type
 
         const $span = document.createElement("span")
         $span.textContent = capitalize(label)
@@ -23,26 +25,25 @@ export default class TagTemplate {
         return $tag
     }
 
-    fadeInAnimation($tag) {
-        const $tagList = document.querySelectorAll(".tag")
-        if ($tagList.length === 1) {
-            this.$recipesContainer.classList.add("down")
+    renderTags(allActiveFilters) {
+        const $tagList = document.querySelector(".tag-list")
+        const $recipes = document.querySelector(".recipes")
+        
+        $tagList.innerHTML = ""
+
+        if (allActiveFilters.length > 0) {
+            $recipes.classList.add("down")
+        } else {
+            $recipes.classList.remove("down")
         }
-        setTimeout(() => {
-            $tag.classList.add("showing", "visible")
-            setTimeout(() => $tag.classList.remove("showing"), 150)
-        }, 150)
-    }
-    
-    fadeOutAnimation($tag) {
-        $tag.classList.add("hidding")
-        setTimeout(() => {
-            $tag.remove()
-            const $tagList = document.querySelectorAll(".tag")
-            if ($tagList.length === 0) {
-                this.$recipesContainer.classList.remove("down")
-            }
-        }, 150)
+
+        allActiveFilters.forEach(({ type, label }) => {
+        const $tag = this.createTag(type, label)
+            $tagList.appendChild($tag)
+            setTimeout(() => {
+                $tag.classList.add("visible")
+            }, 150)
+        })
     }
 
 }

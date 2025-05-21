@@ -11,7 +11,6 @@ export default class Tag {
         const $template = new TagTemplate()
         const $tag = $template.createTag(capitalize(this._label))
         document.querySelector(".tag-list").appendChild($tag)
-        $template.fadeInAnimation($tag)
         return $tag
     }
 
