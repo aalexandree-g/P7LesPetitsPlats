@@ -1,28 +1,33 @@
+import { capitalize } from "../utils/stringUtils.js"
+
 export default class RecipeTemplate {
+
     constructor(recipe) {
         this._recipe = recipe
     }
 
-    createRecipeCard() {
+    createCard() {
         // generate list of ingredients
-        const ingredientsHTML = this._recipe.formattedIngredients.map(item => {
+        const ingredientsHTML = this._recipe.ingredients.map(item => {
+            const ingredient = capitalize(item.name)
             return `
                 <p class="ingredient-element">
-                    <span class="ingredient-name">${item.name}</span>
+                    <span class="ingredient-name">${ingredient}</span>
                     <span class="ingredient-quantity">${item.quantity} ${item.unit}</span>
                 </p>
             `
         }).join("")
         // generate card's structure
+        const name = capitalize(this._recipe.name)
         const $card = document.createElement("article")
         $card.classList.add("recipe-card")
         $card.innerHTML = `
             <div class="photo-container">
-                <img src="./assets/photos/${this._recipe.image}" alt="${this._recipe.name} photo">
+                <img src="./assets/photos/${this._recipe.image}" alt="${name} photo">
                 <span class="recipe-time">${this._recipe.time} min</span>
             </div>
             <div class="recipe-text">
-                <h3>${this._recipe.name}</h3>
+                <h3>${name}</h3>
                 <div class="recipe-how-to">
                     <h4>RECETTE</h4>
                     <p class="recipe-description">${this._recipe.description}</p>
@@ -37,4 +42,5 @@ export default class RecipeTemplate {
         `.trim()
         return $card
     }
+    
 }

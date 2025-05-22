@@ -21,69 +21,85 @@
             </h1>
             <div class="search-bar">
                 <input placeholder="Rechercher une recette, un ingrédient... etc">
-                <img src="./assets/icon/search.png" class="search-icon" alt="Icône de recherche" aria-hidden="true">
+                <img src="./assets/icon/search.png" class="search-bar-icon" alt="Icône de recherche" aria-hidden="true">
             </div>
             <img src="./assets/header/banner.jpg" class="banner" alt="Les Petits Plats bannière">
         </div>
     </header>
     <div class="main-background">
-        <main id="main-content">
-            <div class="main-sort">
-                <div class="filters">
-                    <div class="dropdown">
-                        <div class="options" data-type="ingredients">
-                            <button class="filter-title" data-type="ingredients" aria-haspopup="true">
-                                <span>Ingrédients</span>
-                                <img class="chevron-icon" src="./assets/icon/chevron.png" alt="Ouvrir le menu">
-                            </button>
-                            <div class="menu-content">
-                                <div class="filter-search" data-type="ingredients">
-                                    <input>
-                                    <div class="search-icons">
-                                        <i class="fa-solid fa-xmark tag-close-icon"></i>
-                                        <img src="./assets/icon/filters-search.png" class="filter-search-icon" alt="Icône de recherche" aria-hidden="true">
-                                    </div>
-                                </div>
-                                <div class="filter-choices selected" data-type="ingredients">
-                                    <!-- templates are displayed here -->
-                                </div>
-                                <div class="filter-choices remaining" data-type="ingredients">
-                                    <!-- templates are displayed here -->
-                                </div>
-                            </div>
-                        </div>
-                        <div class="options" data-type="appliance">
-                            <button class="filter-title" data-type="appliance" aria-haspopup="true">
-                                <span>Appareils</span>
-                                <img class="chevron-icon" src="./assets/icon/chevron.png" alt="Ouvrir le menu">
-                            </button>
-                            <div class="filter-search" data-type="appliance">
+        <main>
+
+
+
+            <div class="menus-bar">
+                <div class="menus">
+
+
+
+                    <div class="menu" data-type="ingredients">
+                        <button class="menu-title" data-type="ingredients" aria-haspopup="true">
+                            <span>Ingrédients</span>
+                            <img class="chevron-icon" src="./assets/icon/chevron.png" alt="Ouvrir le menu">
+                        </button>
+                        <div class="menu-content">
+                            <div class="filter-search" data-type="ingredients">
                                 <input>
-                                <img src="./assets/icon/filters-search.png" class="filter-search-icon" alt="Icône de recherche" aria-hidden="true">
+                                <div class="filter-search-icons">
+                                    <i class="fa-solid fa-xmark close-icon"></i>
+                                    <img src="./assets/icon/filters-search.png" class="search-icon" alt="Icône de recherche" aria-hidden="true">
+                                </div>
                             </div>
-                            <div class="filter-choices" data-type="appliance">
-                                <!-- templates are displayed here -->
-                            </div>
-                        </div>
-                        <div class="options" data-type="ustensils">
-                            <button class="filter-title" data-type="ustensils" aria-haspopup="true">
-                                <span>Ustensiles</span>
-                                <img class="chevron-icon" src="./assets/icon/chevron.png" alt="Ouvrir le menu">
-                            </button>
-                            <div class="filter-search" data-type="ustensils">
-                                <input>
-                                <img src="./assets/icon/filters-search.png" class="filter-search-icon" alt="Icône de recherche" aria-hidden="true">
-                            </div>
-                            <div class="filter-choices" data-type="ustensils">
+                            <div class="filter-list" data-type="ingredients">
                                 <!-- templates are displayed here -->
                             </div>
                         </div>
                     </div>
+
+                    <div class="menu" data-type="appliance">
+                        <button class="menu-title" data-type="appliance" aria-haspopup="true">
+                            <span>Appareils</span>
+                            <img class="chevron-icon" src="./assets/icon/chevron.png" alt="Ouvrir le menu">
+                        </button>
+                        <div class="menu-content">
+                            <div class="filter-search" data-type="appliance">
+                                <input>
+                                <div class="filter-search-icons">
+                                    <i class="fa-solid fa-xmark close-icon"></i>
+                                    <img src="./assets/icon/filters-search.png" class="search-icon" alt="Icône de recherche" aria-hidden="true">
+                                </div>
+                            </div>
+                            <div class="filter-list" data-type="appliance">
+                                <!-- templates are displayed here -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="menu" data-type="ustensils">
+                        <button class="menu-title" data-type="ustensils" aria-haspopup="true">
+                            <span>Appareils</span>
+                            <img class="chevron-icon" src="./assets/icon/chevron.png" alt="Ouvrir le menu">
+                        </button>
+                        <div class="menu-content">
+                            <div class="filter-search" data-type="ustensils">
+                                <input>
+                                <div class="filter-search-icons">
+                                    <i class="fa-solid fa-xmark close-icon"></i>
+                                    <img src="./assets/icon/filters-search.png" class="search-icon" alt="Icône de recherche" aria-hidden="true">
+                                </div>
+                            </div>
+                            <div class="filter-list" data-type="ustensils">
+                                <!-- templates are displayed here -->
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+
                 </div>
-                <div class="nb-recipes">
-                    <h2>
-                        <!-- templates are displayed here -->
-                    </h2>
+                <div class="recipe-count">
+                    <!-- templates are displayed here -->
                 </div>
             </div>
             <div class="tag-list">
@@ -92,6 +108,9 @@
             <div class="recipes">
                 <!-- templates are displayed here -->
             </div>
+
+
+
         </main>
     </div>
     <script type="module" src="./scripts/main.js"></script>
