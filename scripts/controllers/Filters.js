@@ -21,8 +21,8 @@ export default class Filters {
         this._menuTemplate = new MenuTemplate()
     }
 
-    getElementsByType(type) {
-        return this._recipes.flatMap(recipe => {
+    getElementsByType(type, recipes) {
+        return recipes.flatMap(recipe => {
             if (type === "ingredients") return recipe.ingredients.map(i => i.name)
             if (type === "appliance") return [recipe.appliance]
             if (type === "ustensils") return recipe.ustensils
@@ -40,13 +40,11 @@ export default class Filters {
     createTag(type, element) {
 
         const selected = this._filters[type].selected
-        const remaining = this._filters[type].remaining
 
         // filter already exists = ignore
         if (selected.includes(element)) return
 
-        // move filter to selected list
-        this._filters[type].remaining = remaining.filter(tag => tag !== element)
+        // put filter into selected list
         selected.push(element)
         selected.sort((a, b) => a.localeCompare(b, "fr"))
 
@@ -54,45 +52,63 @@ export default class Filters {
         const $selected = document.querySelector(`.selected-list[data-type="${type}"]`)
         if ($selected) { $selected.classList.remove("hidden") }
 
-        // display lists
-        this._menuTemplate.renderFilterLists(type, selected, this._filters[type].remaining)
-        this.setupClickEvents(type)
+        // refresh recipes
+        const filteredRecipes = this.updateDisplay()
+
+        // keep elements from filtered recipes only
+        this._types.forEach(type => {
+            const elements = this.getElementsByType(type, filteredRecipes)
+            const unique = [...new Set(elements)].sort((a, b) => a.localeCompare(b, "fr"))
+
+            // remove element from remaining list
+            this._filters[type].remaining = unique.filter(el => el !== element)
+
+            this._menuTemplate.renderFilterLists(type, this._filters[type].selected, this._filters[type].remaining)
+            this.setupClickEvents(type)
+        })
 
         // display tags
         new TagTemplate().renderTags(this.allActiveFilters)
         this.setupTagCloseEvents()
-
-        // refresh recipes
-        this.updateDisplay()
-
+    
     }
 
     deleteTag(type, element) {
 
-        const selected = this._filters[type].selected
-        const remaining = this._filters[type].remaining
+        // remove element from selected list
+        this._filters[type].selected = this._filters[type].selected.filter(tag => tag !== element)
 
-        // move filter to remaining list
-        this._filters[type].selected = selected.filter(tag => tag !== element)
-        remaining.push(element)
-        remaining.sort((a, b) => a.localeCompare(b, "fr"))
-        
         // hide selected list if empty
         if (this._filters[type].selected.length === 0) {
             const $selected = document.querySelector(`.selected-list[data-type="${type}"]`)
             if ($selected) { $selected.classList.add("hidden") }
         }
 
-        // display lists
-        this._menuTemplate.renderFilterLists(type, this._filters[type].selected, remaining)
-        this.setupClickEvents(type)
+        setTimeout(() => {
+
+            // refresh recipes
+            const filteredRecipes = this.updateDisplay()
+
+            // keep elements from filtered recipes only
+            this._types.forEach(type => {
+                const elements = this.getElementsByType(type, filteredRecipes)
+                const unique = [...new Set(elements)].sort((a, b) => a.localeCompare(b, "fr"))
+
+                // add element to remaining list
+                this._filters[type].remaining = unique.filter(el => 
+                    !this._filters[type].selected.includes(el)
+                )
+
+                // display lists
+                this._menuTemplate.renderFilterLists(type, this._filters[type].selected, this._filters[type].remaining)
+                this.setupClickEvents(type)
+            })
+
+        }, 300)
 
         // display tags
         new TagTemplate().renderTags(this.allActiveFilters)
         this.setupTagCloseEvents()
-
-        // refresh recipes
-        setTimeout(() => this.updateDisplay(), 350)
 
     }
 
@@ -128,6 +144,8 @@ export default class Filters {
         } else {
             recipeCountTemplate.zeroRecipeError()
         }
+
+        return filtered
 
     }
 
@@ -166,7 +184,7 @@ export default class Filters {
         // get all elements by type from all recipes
         this._types.forEach(type => {
             // delete duplicates and sort alphabetically
-            const elements = this.getElementsByType(type)
+            const elements = this.getElementsByType(type, this._recipes)
             const unique = [...new Set(elements)].sort((a, b) => a.localeCompare(b, "fr"))
             this._filters[type] = { selected: [], remaining: unique }
             this._menuTemplate.renderFilterLists(type, [], unique)
