@@ -61,7 +61,7 @@ export default class Filters {
             const unique = [...new Set(elements)].sort((a, b) => a.localeCompare(b, "fr"))
 
             // remove element from remaining list
-            this._filters[type].remaining = unique.filter(el => el !== element)
+            this._filters[type].remaining = unique.filter(el => !this._filters[type].selected.includes(el))
 
             this._menuTemplate.renderFilterLists(type, this._filters[type].selected, this._filters[type].remaining)
             this.setupClickEvents(type)
@@ -95,9 +95,7 @@ export default class Filters {
                 const unique = [...new Set(elements)].sort((a, b) => a.localeCompare(b, "fr"))
 
                 // add element to remaining list
-                this._filters[type].remaining = unique.filter(el => 
-                    !this._filters[type].selected.includes(el)
-                )
+                this._filters[type].remaining = unique.filter(el => !this._filters[type].selected.includes(el))
 
                 // display lists
                 this._menuTemplate.renderFilterLists(type, this._filters[type].selected, this._filters[type].remaining)
