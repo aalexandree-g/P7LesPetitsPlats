@@ -1,6 +1,5 @@
 import RecipeTemplate from "../templates/RecipeTemplate.js"
 import FiltersTemplate from "../templates/FiltersTemplate.js"
-import TagTemplate from "../templates/TagTemplate.js"
 import Menu from "./Menu.js"
 import MenuTemplate from "../templates/MenuTemplate.js"
 
@@ -68,7 +67,7 @@ export default class Filters {
         })
 
         // display tags
-        new TagTemplate().renderTags(this.allActiveFilters)
+        new FiltersTemplate().renderTags(this.allActiveFilters)
         this.setupTagCloseEvents()
     
     }
@@ -105,7 +104,7 @@ export default class Filters {
         }, 300)
 
         // display tags
-        new TagTemplate().renderTags(this.allActiveFilters)
+        new FiltersTemplate().renderTags(this.allActiveFilters)
         this.setupTagCloseEvents()
 
     }

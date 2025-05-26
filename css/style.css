@@ -80,14 +80,23 @@ main {
 .search-bar input::placeholder {
     color: #7A7A7A;
 }
+.search-bar input:focus::placeholder {
+    color: transparent;
+}
 .search-bar-icon {
-    padding: 0.6rem;
+    position: relative;
+    padding: 0.75rem;
+    height: 3.25rem;
+    aspect-ratio: 1 / 1;
     margin-right: 0.7rem;
-    max-height: 3.3rem;
+    stroke: #FFFFFF;
     background-color: #1B1B1B;
     border-radius: 0.5rem;
+    cursor: pointer;
+    transition: all 300ms ease-out;
 }
-.search-icon:hover {
+.search-bar-icon:hover {
+    stroke: #000000;
     background-color: #FFD15B;
 }
 
