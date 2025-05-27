@@ -83,7 +83,20 @@ main {
 .search-bar input:focus::placeholder {
     color: transparent;
 }
-.search-bar-icon {
+.search-bar-icons {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+.search-bar-icons .close-icon {
+    display: none;
+    font-size: 1.5rem;
+    color: #7A7A7A;
+}
+.search-bar-icons .close-icon.visible {
+    display: block;
+}
+.search-bar-icons svg {
     position: relative;
     padding: 0.75rem;
     height: 3.25rem;
@@ -95,7 +108,7 @@ main {
     cursor: pointer;
     transition: all 300ms ease-out;
 }
-.search-bar-icon:hover {
+.search-bar-icons svg:hover {
     stroke: #000000;
     background-color: #FFD15B;
 }
@@ -309,13 +322,22 @@ main {
 .recipes {
     position: relative;
     z-index: 10;
-    display: grid;
+    /*display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     column-gap: 3rem;
-    row-gap: 4rem;
+    row-gap: 4rem;*/
+
+
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 4rem 3rem;
     transform: translateY(0rem);
     transform-origin: bottom;
     transition: transform 300ms ease-in-out;
+}
+.recipes > * {
+  flex: 0 0 calc((100% - 2 * 3rem) / 3);
 }
 .recipes.no-result {
     display: flex;

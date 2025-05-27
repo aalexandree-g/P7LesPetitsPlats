@@ -1,15 +1,14 @@
-import Filters from "./controllers/Filters.js"
 import { recipes } from "./data/recipes.js"
+import { state } from "./utils/state.js"
+import { applyCombinedFiltering } from "./utils/applyCombinedFiltering.js"
 import Recipe from "./models/Recipe.js"
-import RecipeTemplate from "./templates/RecipeTemplate.js"
+import Search from "./controllers/Search.js"
+import Filters from "./controllers/Filters.js"
 
-const allRecipes = recipes.map(data => new Recipe(data))
+state.allRecipes = recipes.map(data => new Recipe(data))
+state.filteredByTags = [...state.allRecipes]
 
-// display menus
-new Filters(allRecipes).init()
+new Search().init()
+new Filters().init()
 
-// display recipes
-allRecipes.forEach(recipe => {
-    const $card = new RecipeTemplate(recipe).createCard()
-    document.querySelector(".recipes").appendChild($card)
-})
+applyCombinedFiltering()

@@ -25,7 +25,7 @@ export default class Recipe {
     get ingredients() {
         return this._ingredients.map(element => {
             return {
-                name: element.ingredient.toLowerCase(),
+                ingredient: element.ingredient.toLowerCase(),
                 quantity: element.quantity ? `${element.quantity}` : "",
                 unit: element.unit ? ` ${element.unit}` : ""
             }

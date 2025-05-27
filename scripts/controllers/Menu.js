@@ -25,20 +25,20 @@ export default class Menu {
     initSearch($menu) {
 
         const type = $menu.dataset.type
-        const { $input, $icon } = this.getSearchElements($menu)
+        const { $input, $closeIcon } = this.getSearchElements($menu)
 
         if (!$input) return
 
-        // display search cross icon
+        // display search and cross icon
         $input.addEventListener("input", () => {
             const value = $input.value
-            if ($icon) $icon.classList.toggle("visible", value !== "")
+            if ($closeIcon) $icon.classList.toggle("visible", value !== "")
             this.searchItems(type, value)
         })
 
         // reset input
-        if ($icon) {
-            $icon.addEventListener("click", () => {
+        if ($closeIcon) {
+            $closeIcon.addEventListener("click", () => {
                 this.resetInput(type, $menu)
                 $input.focus()
             })
@@ -60,11 +60,11 @@ export default class Menu {
 
     resetInput(type, $menu) {
 
-        const { $input, $icon } = this.getSearchElements($menu)
+        const { $input, $closeIcon } = this.getSearchElements($menu)
 
         // reset input
         if ($input) $input.value = ""
-        if ($icon) $icon.classList.remove("visible")
+        if ($closeIcon) $closeIcon.classList.remove("visible")
 
         // display all elements' menu
         document.querySelectorAll(`.filter-list[data-type="${type}"] .filter`).forEach($btn => {

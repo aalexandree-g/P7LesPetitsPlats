@@ -1,12 +1,13 @@
-import RecipeTemplate from "../templates/RecipeTemplate.js"
+import { state } from "../utils/state.js"
+import { applyCombinedFiltering } from "../utils/applyCombinedFiltering.js"
 import FiltersTemplate from "../templates/FiltersTemplate.js"
 import Menu from "./Menu.js"
 import MenuTemplate from "../templates/MenuTemplate.js"
 
 export default class Filters {
 
-    constructor(recipes) {
-        this._recipes = recipes
+    constructor() {
+        this._recipes = state.allRecipes
         this._types = ["ingredients", "appliance", "ustensils"]
         this._filters = { 
             ingredients: { selected: [], remaining: [] },
@@ -22,7 +23,7 @@ export default class Filters {
 
     getElementsByType(type, recipes) {
         return recipes.flatMap(recipe => {
-            if (type === "ingredients") return recipe.ingredients.map(i => i.name)
+            if (type === "ingredients") return recipe.ingredients.map(i => i.ingredient)
             if (type === "appliance") return [recipe.appliance]
             if (type === "ustensils") return recipe.ustensils
             return []
@@ -116,31 +117,16 @@ export default class Filters {
         const selectedLabels = this.allActiveFilters.map(f => f.label)
 
         // keep recipes matching tags
-        const filtered = this._recipes.filter(recipe =>
+        const filtered = state.allRecipes.filter(recipe =>
             selectedLabels.every(label =>
-                recipe.ingredients.some(i => i.name === label) ||
+                recipe.ingredients.some(i => i.ingredient === label) ||
                 recipe.appliance === label ||
                 recipe.ustensils.includes(label)
             )
         )
 
-        // empty old recipes
-        this.$recipesContainer.innerHTML = ""
-        document.querySelector(".recipe-count").innerHTML = ""
-
-        // display number of recipes
-        const recipeCountTemplate = new FiltersTemplate()
-        recipeCountTemplate.updateRecipeCount(filtered.length)
-
-        // display filtered recipes
-        if (filtered.length > 0) {
-            filtered.forEach(recipe => {
-                const $card = new RecipeTemplate(recipe).createCard()
-                this.$recipesContainer.appendChild($card)
-            })
-        } else {
-            recipeCountTemplate.zeroRecipeError()
-        }
+        state.filteredByTags = filtered
+        applyCombinedFiltering()
 
         return filtered
 

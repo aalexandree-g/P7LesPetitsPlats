@@ -9,7 +9,7 @@ export default class RecipeTemplate {
     createCard() {
         // generate list of ingredients
         const ingredientsHTML = this._recipe.ingredients.map(item => {
-            const ingredient = capitalize(item.name)
+            const ingredient = capitalize(item.ingredient)
             return `
                 <p class="ingredient-element">
                     <span class="ingredient-name">${ingredient}</span>
