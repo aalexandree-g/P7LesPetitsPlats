@@ -1,5 +1,5 @@
 import { state } from "../utils/state.js"
-import { applyCombinedFiltering, filteringOLD } from "../utils/applyCombinedFiltering.js"
+import { applyCombinedFiltering } from "../utils/applyCombinedFiltering.js"
 
 import Menu from "./Menu.js"
 import MenuTemplate from "../templates/MenuTemplate.js"
