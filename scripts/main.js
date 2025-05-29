@@ -7,6 +7,9 @@ import Filters from "./controllers/Filters.js"
 import Menu from "./controllers/Menu.js"
 
 function initApp() {
+
+    console.log("NATIVE LOOPS VERSION")
+
     state.allRecipes = recipes.map(data => new Recipe(data))
     state.filteredByTags = [...state.allRecipes]
 
