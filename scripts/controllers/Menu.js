@@ -1,66 +1,42 @@
+import MenuTemplate from "../templates/MenuTemplate.js"
+
 export default class Menu {
+    constructor() {
+        this._types = [
+            { type: "ingredients", label: "Ingrédients" },
+            { type: "appliance", label: "Appareils" },
+            { type: "ustensils", label: "Ustensiles" }
+        ]
+        this.$container = document.getElementById("menus-container")
+        this._template = new MenuTemplate()
+    }
+
+    generateMenus() {
+        this._types.forEach(({ type, label }) => {
+            const $menu = this._template.createMenu(type, label)
+            this.$container.appendChild($menu)
+        })
+    }
 
     toggleMenu(type) {
         const $menu = document.querySelector(`.menu[data-type="${type}"]`)
+
         if (!$menu) return
+        
         $menu.classList.toggle("open")
         if ($menu.classList.contains("open")) {
-            $menu.querySelector("input").focus()
+            $menu.querySelector("input")?.focus()
         }
     }
 
     closeMenu($menu) {
+        if (!$menu) return
+
+        const $input = $menu.querySelector("input")
+        const $closeIcon = $menu.querySelector(".close-icon")
         const type = $menu.dataset.type
+
         $menu.classList.remove("open")
-        this.resetInput(type, $menu)
-    }
-
-    getSearchElements($menu) {
-        return {
-            $input: $menu.querySelector("input"),
-            $icon: $menu.querySelector(".close-icon")
-        }
-    }
-
-    initSearch($menu) {
-
-        const type = $menu.dataset.type
-        const { $input, $closeIcon } = this.getSearchElements($menu)
-
-        if (!$input) return
-
-        // display search and cross icon
-        $input.addEventListener("input", () => {
-            const value = $input.value
-            if ($closeIcon) $icon.classList.toggle("visible", value !== "")
-            this.searchItems(type, value)
-        })
-
-        // reset input
-        if ($closeIcon) {
-            $closeIcon.addEventListener("click", () => {
-                this.resetInput(type, $menu)
-                $input.focus()
-            })
-        }
-
-    }
-
-    searchItems(type, inputValue) {
-
-        const normalized = str => str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase()
-        const value = normalized(inputValue)
-
-        document.querySelectorAll(`.filter-list[data-type="${type}"] .filter`).forEach($btn => {
-            const text = normalized($btn.textContent)
-            $btn.classList.toggle("hidden", !text.includes(value))
-        })
-
-    }
-
-    resetInput(type, $menu) {
-
-        const { $input, $closeIcon } = this.getSearchElements($menu)
 
         // reset input
         if ($input) $input.value = ""
@@ -70,28 +46,23 @@ export default class Menu {
         document.querySelectorAll(`.filter-list[data-type="${type}"] .filter`).forEach($btn => {
             $btn.classList.remove("hidden")
         })
-
     }
 
     init() {
+        this.generateMenus()
 
         document.querySelectorAll(".menu-title").forEach($title => {
             $title.addEventListener("click", () => {
-                const clickedType = $title.dataset.type
+                const type = $title.dataset.type
 
                 // close other menus
                 document.querySelectorAll(".menu").forEach($menu => {
-                    if ($menu.dataset.type !== clickedType) this.closeMenu($menu)
+                    if ($menu.dataset.type !== type) this.closeMenu($menu)
                 })
 
-                this.toggleMenu(clickedType)
+                this.toggleMenu(type)
             })
         })
-
-        document.querySelectorAll(".menu").forEach($menu => {
-            this.initSearch($menu)
-        })
-        
     }
     
 }

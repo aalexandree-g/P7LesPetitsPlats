@@ -1,7 +1,6 @@
 import { capitalize } from "../utils/stringUtils.js"
 
 export default class RecipeTemplate {
-
     constructor(recipe) {
         this._recipe = recipe
     }
@@ -17,10 +16,12 @@ export default class RecipeTemplate {
                 </p>
             `
         }).join("")
+
         // generate card's structure
         const name = capitalize(this._recipe.name)
         const $card = document.createElement("article")
         $card.classList.add("recipe-card")
+        
         $card.innerHTML = `
             <div class="photo-container">
                 <img src="./assets/photos/${this._recipe.image}" alt="${name} photo">
@@ -40,7 +41,7 @@ export default class RecipeTemplate {
                 </div>
             </div>
         `.trim()
+
         return $card
     }
-    
 }

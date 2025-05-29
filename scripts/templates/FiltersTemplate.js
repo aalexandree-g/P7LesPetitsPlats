@@ -1,7 +1,6 @@
 import { capitalize } from "../utils/stringUtils.js"
 
 export default class FiltersTemplate {
-
     createFilter(type, item) {
         const $filter = document.createElement("button")
         $filter.classList.add("filter")
@@ -52,7 +51,7 @@ export default class FiltersTemplate {
         }
 
         allActiveFilters.forEach(({ type, label }) => {
-        const $tag = this.createTag(type, label)
+            const $tag = this.createTag(type, label)
             $tagList.appendChild($tag)
             setTimeout(() => {
                 $tag.classList.add("visible")

@@ -1,11 +1,11 @@
 import { state } from "../utils/state.js"
-import { applyCombinedFiltering } from "../utils/applyCombinedFiltering.js"
-import FiltersTemplate from "../templates/FiltersTemplate.js"
+import { applyCombinedFiltering, filteringOLD } from "../utils/applyCombinedFiltering.js"
+
 import Menu from "./Menu.js"
 import MenuTemplate from "../templates/MenuTemplate.js"
+import FiltersTemplate from "../templates/FiltersTemplate.js"
 
 export default class Filters {
-
     constructor() {
         this._recipes = state.allRecipes
         this._types = ["ingredients", "appliance", "ustensils"]
@@ -17,7 +17,6 @@ export default class Filters {
         this.$recipesContainer = document.querySelector(".recipes")
         this.updateDisplay()
         this._menu = new Menu()
-        this._menu.init()
         this._menuTemplate = new MenuTemplate()
     }
 
@@ -37,24 +36,7 @@ export default class Filters {
         )
     }
 
-    createTag(type, element) {
-
-        const selected = this._filters[type].selected
-
-        // filter already exists = ignore
-        if (selected.includes(element)) return
-
-        // put filter into selected list
-        selected.push(element)
-        selected.sort((a, b) => a.localeCompare(b, "fr"))
-
-        // show selected list
-        const $selected = document.querySelector(`.selected-list[data-type="${type}"]`)
-        if ($selected) { $selected.classList.remove("hidden") }
-
-        // refresh recipes
-        const filteredRecipes = this.updateDisplay()
-
+    updateMenusAndTags(filteredRecipes) {
         // keep elements from filtered recipes only
         this._types.forEach(type => {
             const elements = this.getElementsByType(type, filteredRecipes)
@@ -70,11 +52,28 @@ export default class Filters {
         // display tags
         new FiltersTemplate().renderTags(this.allActiveFilters)
         this.setupTagCloseEvents()
-    
+    }
+
+    createTag(type, element) {
+        const selected = this._filters[type].selected
+
+        // filter already exists = ignore
+        if (selected.includes(element)) return
+
+        // put filter into selected list
+        selected.push(element)
+        selected.sort((a, b) => a.localeCompare(b, "fr"))
+
+        // show selected list
+        const $selected = document.querySelector(`.selected-list[data-type="${type}"]`)
+        if ($selected) { $selected.classList.remove("hidden") }
+
+        // refresh
+        const filteredRecipes = this.updateDisplay()
+        this.updateMenusAndTags(filteredRecipes)
     }
 
     deleteTag(type, element) {
-
         // remove element from selected list
         this._filters[type].selected = this._filters[type].selected.filter(tag => tag !== element)
 
@@ -84,34 +83,12 @@ export default class Filters {
             if ($selected) { $selected.classList.add("hidden") }
         }
 
-        setTimeout(() => {
-
-            // refresh recipes
-            const filteredRecipes = this.updateDisplay()
-
-            // keep elements from filtered recipes only
-            this._types.forEach(type => {
-                const elements = this.getElementsByType(type, filteredRecipes)
-                const unique = [...new Set(elements)].sort((a, b) => a.localeCompare(b, "fr"))
-
-                // add element to remaining list
-                this._filters[type].remaining = unique.filter(el => !this._filters[type].selected.includes(el))
-
-                // display lists
-                this._menuTemplate.renderFilterLists(type, this._filters[type].selected, this._filters[type].remaining)
-                this.setupClickEvents(type)
-            })
-
-        }, 300)
-
-        // display tags
-        new FiltersTemplate().renderTags(this.allActiveFilters)
-        this.setupTagCloseEvents()
-
+        // refresh
+        const filteredRecipes = this.updateDisplay()
+        this.updateMenusAndTags(filteredRecipes)
     }
 
     updateDisplay() {
-
         this.$recipesContainer.classList.remove("no-result")
 
         const selectedLabels = this.allActiveFilters.map(f => f.label)
@@ -125,15 +102,14 @@ export default class Filters {
             )
         )
 
+        // refresh
         state.filteredByTags = filtered
-        applyCombinedFiltering()
+        const filteredRecipes = applyCombinedFiltering()
 
-        return filtered
-
+        return filteredRecipes
     }
 
     setupClickEvents(type) {
-
         document.querySelectorAll(`.filter-list[data-type="${type}"] .filter`).forEach($btn => {
             const $menu = $btn.closest(".menu")
             const value = $btn.value
@@ -148,8 +124,7 @@ export default class Filters {
                 if ($menu) this._menu.closeMenu($menu)
                 this.deleteTag(type, value)
             })
-        })
-        
+        })    
     }
 
     setupTagCloseEvents() {
@@ -174,5 +149,4 @@ export default class Filters {
             this.setupClickEvents(type)
         })
     }
-
 }

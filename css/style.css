@@ -92,6 +92,7 @@ main {
     display: none;
     font-size: 1.5rem;
     color: #7A7A7A;
+    cursor: pointer;
 }
 .search-bar-icons .close-icon.visible {
     display: block;
