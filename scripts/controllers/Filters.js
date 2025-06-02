@@ -1,5 +1,5 @@
 import { state } from "../utils/state.js"
-import { applyCombinedFiltering } from "../utils/applyCombinedFiltering.js"
+import { search } from "../utils/search.js"
 
 import Menu from "./Menu.js"
 import MenuTemplate from "../templates/MenuTemplate.js"
@@ -104,7 +104,7 @@ export default class Filters {
 
         // refresh
         state.filteredByTags = filtered
-        const filteredRecipes = applyCombinedFiltering()
+        const filteredRecipes = search()
 
         return filteredRecipes
     }
