@@ -41,36 +41,29 @@ export function search() {
     $recipesContainer.innerHTML = ""
 
     // clone state.filteredByTags
-    const recipesToShow = []
-    for (let i = 0; i < state.filteredByTags.length; i++) {
-        recipesToShow.push(state.filteredByTags[i])
-    }
-
+    let recipesToShow = [...state.filteredByTags]
+    
     // normalize search query
-    const words = []
-    const rawWords = state.searchQuery.split(/\s+/)
-    for (let i = 0; i < rawWords.length; i++) {
-        words.push(normalize(rawWords[i]))
-    }
+    const words = state.searchQuery.split(/\s+/).map(normalize)
 
     // filter recipes
-    const finalRecipes = filterRecipesBySearchQueryNative(recipesToShow, words)
-
+    recipesToShow = filterRecipesBySearchQueryNative(recipesToShow, words)
+    
     // display number of recipes
     const recipeCountTemplate = new FiltersTemplate()
-    recipeCountTemplate.updateRecipeCount(finalRecipes.length)
+    recipeCountTemplate.updateRecipeCount(recipesToShow.length)
 
     // display filtered recipes
-    if (finalRecipes.length > 0) {
+    if (recipesToShow.length > 0) {
         $recipesContainer.classList.remove("no-result")
 
-        for (let i = 0; i < finalRecipes.length; i++) {
-            const $card = new RecipeTemplate(finalRecipes[i]).createCard()
+        recipesToShow.forEach(recipe => {
+            const $card = new RecipeTemplate(recipe).createCard()
             $recipesContainer.appendChild($card)
-        }
+        })
     } else {
         recipeCountTemplate.zeroRecipeError()
     }
 
-    return finalRecipes
+    return recipesToShow
 }
